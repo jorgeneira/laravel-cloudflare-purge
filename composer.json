@@ -1,6 +1,6 @@
 {
     "name": "michelecurletta/laravel-cloudflare-purge",
-    "description": "This Laravel 5 package allows you to easly clear Cloudflare cache through a simple Artisan command.",
+    "description": "This Laravel package allows you to purge Cloudflare cache with ease.",
     "type": "package",
     "require": {
         "php": ">=5.5.9",
