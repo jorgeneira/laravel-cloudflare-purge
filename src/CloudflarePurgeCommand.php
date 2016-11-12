@@ -4,7 +4,6 @@ namespace MicheleCurletta\LaravelCloudflarePurge;
 
 use Illuminate\Console\Command;
 use GuzzleHttp\Client;
-use Crypt;
 
 class CloudflarePurgeCommand extends Command
 {

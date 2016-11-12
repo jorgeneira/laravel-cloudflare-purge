@@ -6,7 +6,7 @@ return [
     |--------------------------------------------------------------------------
     | Cloudflare email
     |--------------------------------------------------------------------------
-    |   The email used with Cloudflare
+    |   The email used with Cloudflare account
     |   
     */
 
@@ -17,6 +17,7 @@ return [
     | API Key
     |--------------------------------------------------------------------------
     |   The API Key used to perform requests to Cloudflare's API.
+    |   You can find it into your account's settings page.
     |   
     |
     */
