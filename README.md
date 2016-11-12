@@ -30,7 +30,13 @@ You must also install this service provider.
 ];
 ```
 
-You must make sure that you've setted the right Cloudflare's parameters url into config/laravel-cloudflare-purge.php
+Next, you must publish the config file :
+
+```bash
+php artisan vendor:publish --provider="MicheleCurletta\LaravelCloudflarePurge\CloudflarePurgeServiceProvider" --tag="config"
+```
+
+Make sure that you've setted the right Cloudflare's parameters url into config/laravel-cloudflare-purge.php
 
 ```php
  /*
