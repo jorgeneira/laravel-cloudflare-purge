@@ -27,7 +27,7 @@ class CloudflarePurgeCommand extends Command
     private $apiKey = null;
     private $zoneName = null;
 
-    private $client = null; 
+    private $client = null;
 
     /**
      * Create a new command instance.
@@ -47,7 +47,7 @@ class CloudflarePurgeCommand extends Command
 
     /**
      * Execute the console command.
-     * 
+     *
      * DELETE /zones/:identifier/purge_cache
      *
      * @return mixed
@@ -62,35 +62,33 @@ class CloudflarePurgeCommand extends Command
     }
 
     private function retrieveZoneId()
-    {        
-        $request = $this->client->createRequest('GET', $this->apiEndpoint, [
+    {
+	    $request = $this->client->request('GET', "{$this->apiEndpoint}/client/v4/zones", [
             'headers' => [
                             'X-Auth-Email'  => $this->email,
                             'X-Auth-Key'    => $this->apiKey
-                        ]
+                        ],
+            'query' => [
+			                'name' => $this->zoneName,
+			                'status' => 'active',
+				            'match' => 'all'
+			            ],
         ]);
 
-        $request->setPath('client/v4/zones');
+	    $response = json_decode($request->getBody(), true);
 
-        $requestQuery = $request->getQuery();
-        $requestQuery->set('name', $this->zoneName);
-        $requestQuery->set('status', 'active');
-        $requestQuery->set('match', 'all');
-
-        $response = $this->client->send($request);
-
-        if(($zoneId = $response->json()['result'][0]['id']))
+        if(($zoneId = $response['result'][0]['id']))
         {
             $this->line('Zone id: '.$zoneId);
             return $zoneId;
         }
         else
-            $this->line('Ooops! Errors: '.$response->json()['errors']);
+            $this->line('Ooops! Errors: '.$response['errors']);
     }
 
     private function purgeZone($zoneId)
     {
-        $request = $this->client->createRequest('DELETE', $this->apiEndpoint, [
+	    $request = $this->client->request('DELETE', "{$this->apiEndpoint}/client/v4/zones/{$zoneId}/purge_cache", [
             'headers' => [
                             'X-Auth-Email'  => $this->email,
                             'X-Auth-Key'    => $this->apiKey
@@ -98,13 +96,11 @@ class CloudflarePurgeCommand extends Command
             'json' => ['purge_everything' => true]
         ]);
 
-        $request->setPath('client/v4/zones/'.$zoneId.'/purge_cache');
+	    $response = json_decode($request->getBody(), true);
 
-        $response = $this->client->send($request);
-
-        if(($response->json()['success']))
+        if(($response['success']))
             $this->line('So far, so good. CDN purged!');
         else
-            $this->line('Ooops! Errors: '.$response->json()['errors']);
+            $this->line('Ooops! Errors: '.$response['errors']);
     }
 }
